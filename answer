@@ -547,69 +547,6 @@ public class Solution {
     }
 }
 
-
-Evaluate Reverse Polish Notation
-
-Evaluate the value of an arithmetic expression in Reverse Polish Notation.
-Valid operators are +, -, *, /. Each operand may be an integer or another expression.
-Some examples:
- ["2", "1", "+", "3", "*"] -> ((2 + 1) * 3) -> 9
-  ["4", "13", "5", "/", "+"] -> (4 + (13 / 5)) -> 6
-
-public class Solution {
-    private int valFromStack(Stack[] stack) {
-        int ret = 0;
-        while (!stack[0].empty()) {
-            String exp = (String)stack[0].pop();
-            if (!exp.equals("+") && !exp.equals("-") && !exp.equals("*") && !exp.equals("/")) {
-                ret = Integer.parseInt(exp);
-                return ret;
-            }
-
-            int num2;
-            String exp2 = (String)stack[0].peek();
-            if (!exp2.equals("+") && !exp2.equals("-") && !exp2.equals("*") && !exp2.equals("/")) {
-                num2 = Integer.parseInt(exp2);
-                stack[0].pop();
-            } else {
-                num2 = valFromStack(stack);
-            }
-                
-            int num1;
-            String exp1 = (String)stack[0].peek();
-            if (!exp1.equals("+") && !exp1.equals("-") && !exp1.equals("*") && !exp1.equals("/")) {
-                num1 = Integer.parseInt(exp1);
-                stack[0].pop();
-            } else {
-                num1 = valFromStack(stack);
-            }
-            
-            if (exp.equals("+"))
-                ret = num1 + num2;
-            else if (exp.equals("-"))
-                ret = num1 - num2;
-            else if (exp.equals("*"))
-                ret = num1 * num2;
-            else if (exp.equals("/"))
-                ret = num1 / num2;
-        }
-        
-        return ret;
-    }
-    
-    public int evalRPN(String[] tokens) {
-        if (tokens == null)
-            return 0;
-            
-        Stack stack = new Stack();
-        for (int i = 0; i < tokens.length; ++i)
-            stack.push(tokens[i]);
-        
-        Stack[] stacks = {stack};
-        return valFromStack(stacks);
-    }
-}
-
 Candy
 There are N children standing in a line. Each child is assigned a rating value.
 You are giving candies to these children subjected to the following requirements:
