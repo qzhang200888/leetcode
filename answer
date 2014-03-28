@@ -866,3 +866,58 @@ public:
         return head;
     }
 };
+
+Insertion Sort List
+Sort a linked list using insertion sort.
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode *insertionSortList(ListNode *head) {
+        ListNode *sortedList = NULL;
+        while (head != NULL) {
+            if (sortedList == NULL) {
+                sortedList = head;
+                head = head->next;
+                sortedList->next = NULL;
+                continue;
+            }
+            
+            ListNode *ptr = sortedList, *prevPtr = NULL;
+            while (ptr->next != NULL && ptr->val <= head->val) {
+                prevPtr = ptr;
+                ptr = ptr->next;
+            }
+            
+            if (prevPtr == NULL) {
+                if (ptr->val < head->val) {
+                    ListNode *tmp = ptr->next;
+                    ptr->next = head;
+                    head = head->next;
+                    ptr->next->next = tmp;
+                } else {
+                    sortedList = head;
+                    head = head->next;
+                    sortedList->next = ptr;
+                }
+            } else if (ptr->val > head->val) {
+                prevPtr->next = head;
+                head = head->next;
+                prevPtr->next->next = ptr;
+            } else {
+                ptr->next = head;
+                head = head->next;
+                ptr->next->next = NULL;              
+            }
+        }
+        
+        return sortedList;
+    }
+};
