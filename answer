@@ -921,3 +921,59 @@ public:
         return sortedList;
     }
 };
+
+Reorder List
+
+Given a singly linked list L: L0→L1→…→Ln-1→Ln,
+reorder it to: L0→Ln→L1→Ln-1→L2→Ln-2→…
+
+You must do this in-place without altering the nodes' values.
+
+For example,
+Given {1,2,3,4}, reorder it to {1,4,2,3}. 
+
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    void reorderList(ListNode *head) {
+        if (head == NULL || head->next == NULL)
+            return;
+            
+        vector<ListNode *> v;
+        ListNode *ptr = head;
+        while (ptr) {
+            v.push_back(ptr);
+            ptr = ptr->next;
+        }
+        
+        int i = 0, j = v.size() - 1;
+        ListNode *lastPtr = NULL;
+        while (i < j) {
+           ListNode *front = v.at(i);
+           ListNode *back = v.at(j);
+           
+           if (lastPtr != NULL) {
+               lastPtr->next = front;
+           }
+           
+           front->next = back;
+           lastPtr = back;
+               
+           ++i;
+           --j;
+        }
+        
+        if (i == j) {
+            lastPtr->next = v.at(i);
+            lastPtr->next->next = NULL;
+        } else lastPtr->next = NULL;
+    }
+};
