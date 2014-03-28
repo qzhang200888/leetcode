@@ -1,0 +1,931 @@
+Two sum:
+
+public class Solution {
+    public int[] twoSum(int[] numbers, int target) {
+        if (numbers == null)
+            return null;
+        int[] ret = new int[2];
+
+        HashMap<String, String> map = new HashMap<String, String>();
+        for (int i = 0; i < numbers.length; ++i) {
+            map.put(Integer.toString(target - numbers[i]), Integer.toString(i));
+        }
+
+        for (int i = 0; i < numbers.length; ++i) {
+            if (map.containsKey(Integer.toString(numbers[i]))) {
+                int val1 = Integer.parseInt(map.get(Integer.toString(numbers[i])));
+                int val2 = i;
+                if (val1 < val2) {
+                    ret[0] = val1 + 1;
+                    ret[1] = val2 + 1;
+                    return ret;
+                } else if (val1 > val2) {
+                    ret[0] = val2 + 1;
+                    ret[1] = val1 + 1;
+                    return ret;
+                }
+            }
+        }
+
+        return null;
+    }
+}
+
+Binary Tree Postorder Traversal
+
+/**
+ * Definition for binary tree
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+public class Solution {
+    public ArrayList<Integer> postorderTraversal(TreeNode root) {
+        if (root == null) {
+            return new ArrayList<Integer>();
+        }
+        ArrayList<Integer> left = postorderTraversal(root.left);
+        ArrayList<Integer> right = postorderTraversal(root.right);
+        
+        if (left != null && right != null) {
+            left.addAll(right);
+        } else if (right != null) {
+            left = right;
+        }
+        
+        if (left != null) {
+            left.add(new Integer(root.val));
+        }
+        
+        return left;
+    }
+}
+
+Binary Tree Preorder Traversal
+
+/**
+ * Definition for binary tree
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+public class Solution {
+    public ArrayList<Integer> preorderTraversal(TreeNode root) {
+         if (root == null) {
+            return new ArrayList<Integer>();
+        }
+        ArrayList<Integer> left = preorderTraversal(root.left);
+        ArrayList<Integer> right = preorderTraversal(root.right);
+        
+        ArrayList<Integer> rootNode = new ArrayList<Integer>();
+        rootNode.add(root.val);
+        
+        if (left != null) {
+            rootNode.addAll(left);
+        }
+        
+        if (right != null) {
+            rootNode.addAll(right);
+        }
+        
+        return rootNode;       
+    }
+}
+
+Linked List Cycle
+
+/**
+ * Definition for singly-linked list.
+ * class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) {
+ *         val = x;
+ *         next = null;
+ *     }
+ * }
+ */
+public class Solution {
+    public boolean hasCycle(ListNode head) {
+        if (head == null)
+            return false;
+            
+        ListNode first = head, second = head.next;
+        while (first != null && second != null) {
+            first = first.next;
+            second = second.next;
+            if (second == null) {
+                return false;
+            }
+            
+            second = second.next;
+            
+            if (first == second) {
+                return true;
+            }
+        }
+        
+        return false;
+    }
+}
+
+Same Tree
+
+Given two binary trees, write a function to check if they are equal or not. 
+
+/**
+ * Definition for binary tree
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+public class Solution {
+    public boolean isSameTree(TreeNode p, TreeNode q) {
+        if (p == null && q == null)
+            return true;
+        if ((p == null && q != null) || (p != null && q == null) )
+            return false;
+        if (p.val != q.val)
+            return false;
+        if (isSameTree(p.left, q.left) && isSameTree(p.right, q.right))
+            return true;
+        return false;
+    }
+}
+
+Gas Station
+There are N gas stations along a circular route, where the amount of gas at station i is gas[i].
+You have a car with an unlimited gas tank and it costs cost[i] of gas to travel from station i to its next station (i+1). You begin the journey with an empty tank at one of the gas stations.
+Return the starting gas station's index if you can travel around the circuit once, otherwise return -1.
+
+public class Solution {
+    public int canCompleteCircuit(int[] gas, int[] cost) {
+        int i = 0;
+        while (i < gas.length) {
+            if (gas[i] < cost[i]) {
+                ++i;
+                continue;
+            }
+            int gasAmount = gas[i] - cost[i];
+            int j = (i + 1) % gas.length;
+            while (j != i) {
+               gasAmount += gas[j] - cost[j];
+               if (gasAmount < 0) {
+                   break;
+               }
+               j = (j + 1) % gas.length;
+            }
+            
+            if (j == i) {
+                return j;
+            } else if (j > i) {
+                i = j + 1;
+            } else {
+                break;
+            }
+        }
+
+        return -1;
+    }
+}
+
+Add Two Numbers
+
+You are given two linked lists representing two non-negative numbers. The digits are stored in reverse order and each of their nodes contain a single digit. Add the two numbers and return it as a linked list.
+Input: (2 -> 4 -> 3) + (5 -> 6 -> 4)
+Output: 7 -> 0 -> 8
+
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode(int x) {
+ *         val = x;
+ *         next = null;
+ *     }
+ * }
+ */
+public class Solution {
+    private ListNode add(int num, ListNode l) {
+        if (num == 0)
+            return l;
+            
+        ListNode newList;
+        if (l != null) {
+            newList = new ListNode((l.val + num) % 10);
+            num = (l.val + num) / 10;
+            l = l.next;
+        } else {
+            newList = new ListNode(num % 10);
+            num = num / 10;           
+        }
+        
+        ListNode cur = newList;
+        while (num != 0 && l != null) {
+            cur.next = new ListNode((l.val + num) % 10);
+            num = (l.val + num) / 10;
+            cur = cur.next;
+            l = l.next;
+        }
+        if (num == 0)
+            cur.next = l;
+        else cur.next = new ListNode(num);
+            
+        return newList;
+    }
+    
+    public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+        if (l1 == null)
+            return l2;
+        
+        if (l2 == null)
+            return l1;
+            
+        int num = (l1.val + l2.val) / 10;
+        ListNode head = new ListNode((l1.val + l2.val) % 10);
+        ListNode cur = head;
+        l1 = l1.next;
+        l2 = l2.next;
+        
+        while (l1 != null && l2 != null) {
+           cur.next = new ListNode((l1.val + l2.val + num) % 10);
+           num = (l1.val + l2.val + num) / 10;
+           cur = cur.next;
+           l1 = l1.next;
+           l2 = l2.next;
+        }
+        
+        if (l1 != null) {
+            cur.next = add(num, l1);
+        } else if (l2 != null) {
+            cur.next = add(num, l2);
+        } else if (num != 0) {
+            cur.next = new ListNode(num);
+        }
+        
+        return head;
+    }
+}
+
+String to Integer (atoi)
+
+public class Solution {
+    public int atoi(String str) {
+        if (str == null || str.length() == 0)
+            return 0;
+        
+        int length = str.length();
+        
+        int i = 0;
+        while (i < length && str.charAt(i) == ' ')
+            ++i;
+            
+        int sign = 1;
+        if (i < length && str.charAt(i) == '-') {
+            sign = -1;
+            ++i;
+        } else if (i < length && str.charAt(i) == '+')
+            ++i;
+            
+        long ret = 0;
+        while (i < length) {
+            char c = str.charAt(i);
+            if (c < '0' || c > '9')
+                break;
+                
+            ret *= 10;
+            ret += sign * (c - '0');
+            if (sign == 1 && ret >= Integer.MAX_VALUE) {
+                ret = Integer.MAX_VALUE;
+                break;
+            } else if (sign == -1 && ret <= Integer.MIN_VALUE) {
+                ret = Integer.MIN_VALUE;
+                break;
+            }
+            ++i;
+        }
+        
+        return (int)ret;
+    }
+}
+
+Valid Palindrome
+
+Given a string, determine if it is a palindrome, considering only alphanumeric characters and ignoring cases.
+For example,
+"A man, a plan, a canal: Panama" is a palindrome.
+"race a car" is not a palindrome.
+
+public class Solution {
+    public boolean isPalindrome(String s) {
+        if (s == null)
+            return true;
+        if (s.length() < 2)
+            return true;
+            
+        int i = 0, j = s.length() - 1;
+        while (i < j) {
+            if (!Character.isLetter(s.charAt(i)) && !Character.isDigit(s.charAt(i))) {
+                ++i;
+                continue;
+            }
+            if (!Character.isLetter(s.charAt(j)) && !Character.isDigit(s.charAt(j))) {
+                --j;
+                continue;
+            }
+            
+            if (Character.toLowerCase(s.charAt(i)) != Character.toLowerCase(s.charAt(j)))
+                return false;
+            ++i;
+            --j;
+        }
+        
+        return true;
+    }
+}
+
+Binary Tree Maximum Path Sum
+
+Given a binary tree, find the maximum path sum.
+The path may start and end at any node in the tree.
+For example:
+Given the below binary tree,
+      1
+      / \
+     2   3
+
+Return 6.
+
+
+/**
+ * Definition for binary tree
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+public class Solution {
+    public int[] maxPathSumPair(TreeNode root) {
+        int[] ret = new int[2];
+        ret[0] = 0;
+        ret[1] = 0;
+        
+        if (root == null)
+            return ret;
+            
+        int[] leftRet = maxPathSumPair(root.left);
+        int[] rightRet = maxPathSumPair(root.right);
+        
+        if (leftRet[1] > rightRet[1])
+            ret[1] = leftRet[1] + root.val;
+        else ret[1] = rightRet[1] + root.val;
+        ret[1] = ret[1] > root.val ? ret[1] : root.val;
+        
+        int sum = ret[1];
+        if (root.left != null)
+            sum = sum > leftRet[0] ? sum : leftRet[0];
+        if (root.right != null)
+            sum = sum > rightRet[0] ? sum : rightRet[0];
+        
+        int tempSum = leftRet[1] + root.val + rightRet[1];
+        sum = sum > tempSum ? sum : tempSum;
+        sum = sum > root.val ? sum : root.val;
+        
+        ret[0] = sum;
+        
+        return ret;
+    }
+    
+    public int maxPathSum(TreeNode root) {
+        int[] sumPair = maxPathSumPair(root);
+        return sumPair[0];
+    }
+}
+
+Longest Substring Without Repeating Characters
+
+Given a string, find the length of the longest substring without repeating characters. For example, the longest substring without repeating letters for "abcabcbb" is "abc", which the length is 3. For "bbbbb" the longest substring is "b", with the length of 1.
+
+public class Solution {
+    public int lengthOfLongestSubstring(String s) {
+        if (s == null)
+            return 0;
+            
+        HashMap<Character, Integer> map = new HashMap<Character, Integer>();
+        int length = s.length();
+        int start = 0, end = 0, curStart = 0;
+        
+        for (int i = 0; i < length; ++i) {
+            Character c = new Character(s.charAt(i));
+            if (map.containsKey(c)) {
+                if ((i - curStart) > (end - start)) {
+                    start = curStart;
+                    end = i;
+                }
+                
+                int newPos = map.get(c).intValue();
+                for (int j = curStart; j <= newPos; ++j)
+                    map.remove(new Character(s.charAt(j)));
+                curStart = newPos + 1;
+            }
+            
+            map.put(c, new Integer(i));
+        }
+        
+        if ((length - curStart) > (end - start)) {
+            start = curStart;
+            end = length;
+        }
+        
+        if (end != 0)
+            return end - start;
+        return length;
+    }
+}
+
+
+Regular Expression Matching ?
+
+'.' Matches any single character.
+'*' Matches zero or more of the preceding element.
+
+The matching should cover the entire input string (not partial).
+
+The function prototype should be:
+bool isMatch(const char *s, const char *p)
+
+Some examples:
+isMatch("aa","a") → false
+isMatch("aa","aa") → true
+isMatch("aaa","aa") → false
+isMatch("aa", "a*") → true
+isMatch("aa", ".*") → true
+isMatch("ab", ".*") → true
+isMatch("aab", "c*a*b") → true
+
+public class Solution {
+    public boolean isMatch(String s, String p, char prevP) {
+        if (s.length() == 0 && p.length() == 0)
+            return true;
+        if (s.length() == 0 && p.length() != 0) {
+            for (int i = 0; i < p.length(); ++i) {
+                if (p.charAt(i) != '*')
+                    return false;
+            }
+            return true;
+        }
+        if (s.length() != 0 && p.length() == 0) {
+            return false;
+        }
+        
+        char cs = s.charAt(0), cp = p.charAt(0);
+        
+        int i = 0, j = 0;
+        if (cs == cp) {
+            if ((j+1) < p.length()) {
+                int jj = j;
+                while ((jj+1) < p.length() && p.charAt(jj+1) == '*')
+                    ++jj;
+                ++jj;
+                if (jj > (j+1) && jj < p.length() && isMatch(s.substring(i), p.substring(jj), '0'))
+                    return true;
+                if (jj > (j+1) && jj < p.length() && isMatch(s.substring(i+1), p.substring(jj), '0')) {
+                    return true;
+                }
+            }
+
+            prevP = cp;
+            ++i;
+            ++j;
+        } else if (cp == '.') {
+            ++i;
+            ++j;
+            prevP = cp;
+        } else if (cp == '*'){
+            if (prevP == cs || prevP == '.') {
+                if (isMatch(s.substring(i+1), p.substring(j), '0'))
+                    return true;
+                ++i;
+                ++j;
+            } else ++j;
+        } else {
+            if ((j+1) < p.length()) {
+                int jj = j;
+                while ((jj+1) < p.length() && p.charAt(jj+1) == '*')
+                    ++jj;
+                ++jj;
+                if (jj > (j+1) && jj < p.length() && isMatch(s.substring(i), p.substring(jj), '0'))
+                    return true;
+            }
+            
+            return false;
+        }
+        
+        return isMatch(s.substring(i), p.substring(j), prevP);
+    }
+    
+    public boolean isMatch(String s, String p) {
+        if (s == null && p == null)
+            return true;
+        if ((s != null && p == null) || (s == null && p != null))
+            return false;
+        
+        char prep = '0';
+        return isMatch(s, p, prep);
+    }
+}
+
+
+Evaluate Reverse Polish Notation
+
+Evaluate the value of an arithmetic expression in Reverse Polish Notation.
+Valid operators are +, -, *, /. Each operand may be an integer or another expression.
+Some examples:
+ ["2", "1", "+", "3", "*"] -> ((2 + 1) * 3) -> 9
+  ["4", "13", "5", "/", "+"] -> (4 + (13 / 5)) -> 6
+
+public class Solution {
+    private int valFromStack(Stack[] stack) {
+        int ret = 0;
+        while (!stack[0].empty()) {
+            String exp = (String)stack[0].pop();
+            if (!exp.equals("+") && !exp.equals("-") && !exp.equals("*") && !exp.equals("/")) {
+                ret = Integer.parseInt(exp);
+                return ret;
+            }
+
+            int num2;
+            String exp2 = (String)stack[0].peek();
+            if (!exp2.equals("+") && !exp2.equals("-") && !exp2.equals("*") && !exp2.equals("/")) {
+                num2 = Integer.parseInt(exp2);
+                stack[0].pop();
+            } else {
+                num2 = valFromStack(stack);
+            }
+                
+            int num1;
+            String exp1 = (String)stack[0].peek();
+            if (!exp1.equals("+") && !exp1.equals("-") && !exp1.equals("*") && !exp1.equals("/")) {
+                num1 = Integer.parseInt(exp1);
+                stack[0].pop();
+            } else {
+                num1 = valFromStack(stack);
+            }
+            
+            if (exp.equals("+"))
+                ret = num1 + num2;
+            else if (exp.equals("-"))
+                ret = num1 - num2;
+            else if (exp.equals("*"))
+                ret = num1 * num2;
+            else if (exp.equals("/"))
+                ret = num1 / num2;
+        }
+        
+        return ret;
+    }
+    
+    public int evalRPN(String[] tokens) {
+        if (tokens == null)
+            return 0;
+            
+        Stack stack = new Stack();
+        for (int i = 0; i < tokens.length; ++i)
+            stack.push(tokens[i]);
+        
+        Stack[] stacks = {stack};
+        return valFromStack(stacks);
+    }
+}
+
+Candy
+There are N children standing in a line. Each child is assigned a rating value.
+You are giving candies to these children subjected to the following requirements:
+Each child must have at least one candy.
+Children with a higher rating get more candies than their neighbors.
+What is the minimum candies you must give?
+
+public class Solution {
+    public int candy(int[] ratings) {
+        if (ratings == null || ratings.length == 0)
+            return 0;
+            
+        int[] candies = new int[ratings.length];
+        candies[0] = 1;
+        
+        for (int i = 1; i < ratings.length; ++i) {
+            if (ratings[i] > ratings[i-1])
+                candies[i] = candies[i-1] + 1;
+            else candies[i] = 1;
+        }
+        
+        for (int i = ratings.length - 2; i >= 0; --i) {
+            if (ratings[i] > ratings[i+1] && candies[i] <= candies[i+1])
+                candies[i] = candies[i+1] + 1;
+        }
+        
+        int total = 0;
+        for (int i = 0; i < ratings.length; ++i)
+            total += candies[i];
+        
+        return total;
+    }
+}
+
+Longest Palindromic Substring
+Given a string S, find the longest palindromic substring in S. You may assume that the maximum length of S is 1000, and there exists one unique longest palindromic substring.
+
+public class Solution {
+    public String longestPalindrome(String s) {
+        if (s == null)
+           return null;
+           
+        int start = 0, end = 0;
+        int length = s.length();
+        for (int i = 0; i < length; ++i) {
+            int j = 1;
+            while (i - j >= 0 && i + j < length) {
+                if (s.charAt(i-j) != s.charAt(i+j))
+                    break;
+                ++j;
+            }
+            
+            if (end - start < 2 * j - 1) {
+                start = i - j + 1;
+                end = i + j;
+            }
+            
+            j = i + 1;
+            int k = i;
+            while (k >= 0 && j < length) {
+                if (s.charAt(k) != s.charAt(j))
+                    break;
+                ++j;
+                --k;
+            }
+            
+            if (end - start < j - k - 1) {
+                start = k + 1;
+                end = j;
+            }
+        }
+        
+        return s.substring(start, end);
+    }
+}
+
+Remove Duplicates from Sorted Array
+Given a sorted array, remove the duplicates in place such that each element appear only once and return the new length.
+Do not allocate extra space for another array, you must do this in place with constant memory.
+For example,
+Given input array A = [1,1,2],
+Your function should return length = 2, and A is now [1,2].
+
+public class Solution {
+    public int removeDuplicates(int[] A) {
+        if (A == null)
+            return 0;
+            
+        HashSet set = new HashSet();
+        
+        int count = 0, pos = 0;
+        for (int i = 0; i < A.length; ++i) {
+            if (set.contains(new Integer(A[i])))
+                continue;
+            else {
+                set.add(new Integer(A[i]));
+                A[pos++] = A[i];
+                ++count;
+            }
+        }
+        
+        return count;
+    }
+}
+
+Symmetric Tree
+Given a binary tree, check whether it is a mirror of itself (ie, symmetric around its center).
+For example, this binary tree is symmetric:
+   1
+   / \
+  2   2
+ / \ / \
+3  4 4  3
+
+But the following is not:
+   1
+   / \
+  2   2
+   \   \
+   3    3
+
+
+/**
+ * Definition for binary tree
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+public class Solution {
+    private boolean isSymmetricTree(TreeNode p, TreeNode q) {
+        if (p == null && q == null)
+            return true;
+        if ((p == null && q != null) || (p != null && q == null) )
+            return false;
+        if (p.val != q.val)
+            return false;
+        if (isSymmetricTree(p.left, q.right) && isSymmetricTree(p.right, q.left))
+            return true;
+        return false;
+    }
+    
+    public boolean isSymmetric(TreeNode root) {
+        if (root == null)
+            return true;
+        return isSymmetricTree(root.left, root.right);
+    }
+}
+
+Maximum Depth of Binary Tree
+Given a binary tree, find its maximum depth.
+The maximum depth is the number of nodes along the longest path from the root node down to the farthest leaf node.
+
+/**
+ * Definition for binary tree
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+public class Solution {
+    public int maxDepth(TreeNode root) {
+        if (root == null)
+            return 0;
+        int leftDepth = maxDepth(root.left);
+        int rightDepth = maxDepth(root.right);
+        if (leftDepth > rightDepth)
+            return leftDepth + 1;
+        return rightDepth + 1;
+    }
+}
+
+Merge Sorted Array
+Given two sorted integer arrays A and B, merge B into A as one sorted array.
+
+public class Solution {
+    public void merge(int A[], int m, int B[], int n) {
+        int i = 0, j = 0, p = 0;
+        int[] C = new int[m+n];
+        while (i < m && j < n) {
+            if (A[i] > B[j])
+                C[p++] = B[j++];
+            else C[p++] = A[i++];
+        }
+        
+        while (i < m)
+            C[p++] = A[i++];
+        while (j < n)
+            C[p++] = B[j++];
+            
+        for (i = 0; i < m+n; ++i)
+            A[i] = C[i];
+    }
+}
+
+Evaluate Reverse Polish Notation
+Evaluate the value of an arithmetic expression in Reverse Polish Notation.
+Valid operators are +, -, *, /. Each operand may be an integer or another expression.
+Some examples:
+ ["2", "1", "+", "3", "*"] -> ((2 + 1) * 3) -> 9
+  ["4", "13", "5", "/", "+"] -> (4 + (13 / 5)) -> 6
+
+C++:
+
+class Solution {
+public:
+    int evalRPN(vector<string> &tokens) {
+        if (tokens.empty())
+            return 0;
+ 
+        string str = tokens.back();
+        tokens.pop_back();
+        if (str != "+" && str != "-" && str != "*" && str != "/") {
+            return atoi(str.c_str());
+        }
+
+        int num2;
+        string str2 = tokens.back();
+        if (str2 != "+" && str2 != "-" && str2 != "*" && str2 != "/") {
+            num2 = atoi(str2.c_str());
+            tokens.pop_back();
+        } else {
+            num2 = evalRPN(tokens);
+        }
+          
+        int num1;
+        string str1 = tokens.back();
+        if (str1 != "+" && str1 != "-" && str1 != "*" && str1 != "/") {
+            num1 = atoi(str1.c_str());
+            tokens.pop_back();
+        } else {
+            num1 = evalRPN(tokens);
+        }
+        
+        int ret;
+        
+        if (str == "+")
+            ret = num1 + num2;
+        else if (str == "-")
+            ret = num1 - num2;
+        else if (str == "*")
+            ret = num1 * num2;
+        else if (str == "/")
+            ret = num1 / num2;
+                
+        return ret;
+    }
+};
+
+Sort List
+Sort a linked list in O(n log n) time using constant space complexity.
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode *sortList(ListNode *head) {
+        if (head == NULL)
+            return NULL;
+            
+        ListNode *left = NULL, *right = NULL;
+        ListNode *cur = head->next, *leftPtr = NULL, *rightPtr = NULL, *headPtr = head;
+        while (cur != NULL) {
+            ListNode *tmp = cur;
+            cur = cur->next;
+            if (tmp->val < head->val) {
+                if (leftPtr == NULL) {
+                    left = tmp;
+                    leftPtr = left;
+                } else {
+                    leftPtr->next = tmp;
+                    leftPtr = leftPtr->next;
+                }
+            } else if (tmp->val > head->val) {
+                if (rightPtr == NULL) {
+                    right = tmp;
+                    rightPtr = right;
+                } else {
+                    rightPtr->next = tmp;
+                    rightPtr = rightPtr->next;
+                }
+            } else {
+                headPtr->next = tmp;
+                headPtr = headPtr->next;              
+            }
+        }
+        
+        if (leftPtr) {
+            leftPtr->next = NULL;
+            left = sortList(left);
+            leftPtr = left;
+            while (leftPtr->next)
+                leftPtr = leftPtr->next;
+        }
+        
+        if (rightPtr) {
+            rightPtr->next = NULL;
+            right = sortList(right);
+        }
+            
+        headPtr->next = right;
+        if (leftPtr) {
+            leftPtr->next = head;
+            return left;
+        }
+        
+        return head;
+    }
+};
