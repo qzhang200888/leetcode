@@ -1077,3 +1077,54 @@ public:
     }
 };
 
+
+Word Break II
+
+ Given a string s and a dictionary of words dict, add spaces in s to construct a sentence where each word is a valid dictionary word.
+
+Return all such possible sentences.
+
+For example, given
+s = "catsanddog",
+dict = ["cat", "cats", "and", "sand", "dog"].
+
+A solution is ["cats and dog", "cat sand dog"]. 
+
+class Solution {
+    vector<string> wordBreak(string s, unordered_set<string> &dict, unordered_set<string> &nonWords) {
+        vector<string> ret;
+        for (int i = 1; i <= s.length(); ++i) {
+            unordered_set<string>::const_iterator it = dict.find (s.substr(0, i));
+            if (it == dict.end())
+                continue;
+                
+            if (i == s.length()) {
+                ret.push_back(s);
+                break;
+            }
+                
+            it = nonWords.find (s.substr(i));
+            if (it != nonWords.end())
+                continue;
+                
+            vector<string> v = wordBreak(s.substr(i), dict, nonWords);
+            if (!v.empty()) {
+                  for (vector<string>::iterator it = v.begin(); it != v.end(); ++it) {
+                      string newStr = s.substr(0, i).append(" ");
+                      newStr = newStr.append(*it);
+                      ret.push_back(newStr);
+                  }
+            } else {
+                nonWords.insert(s.substr(i));
+            }
+        }
+    
+        return ret;
+    }
+    
+public:
+    vector<string> wordBreak(string s, unordered_set<string> &dict) {
+        unordered_set<string> nonWords;
+        return wordBreak(s, dict, nonWords);        
+    }
+};
