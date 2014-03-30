@@ -1140,18 +1140,16 @@ public class Solution {
         if (prices == null || prices.length == 0)
             return 0;
             
-        int buyPrice = prices[0], sellPrice = prices[0], profit = 0, buyIndex = 0, sellIndex = 0;
+        int profit = 0, buyIndex = 0, sellIndex = 0;
         for (int i = 1; i < prices.length; ++i) {
-            if (prices[i] < prices[i-1] && buyPrice > prices[i]) {
-                buyPrice = prices[i];
+            if (prices[buyIndex] > prices[i]) {
                 buyIndex = i;
-            } else if (sellPrice < prices[i] || sellIndex < buyIndex) {
-                sellPrice = prices[i];
+            } else if (prices[sellIndex] < prices[i] || sellIndex < buyIndex) {
                 sellIndex = i;
             }
             
-            if (sellPrice - buyPrice > profit && sellIndex >= buyIndex) {
-                profit = sellPrice - buyPrice;
+            if (prices[sellIndex] - prices[buyIndex] > profit && sellIndex >= buyIndex) {
+                profit = prices[sellIndex] - prices[buyIndex];
             }
         }
         
