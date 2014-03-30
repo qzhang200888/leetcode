@@ -961,3 +961,35 @@ public:
         return sumNumbers(root, 0);
     }
 };
+
+Single Number
+
+Given an array of integers, every element appears twice except for one. Find that single one.
+
+Note:
+Your algorithm should have a linear runtime complexity. Could you implement it without using extra memory? 
+
+public class Solution {
+    public int singleNumber(int[] A) {
+        if (A == null)
+            return 0;
+            
+        HashSet set = new HashSet();
+        for (int i = 0; i < A.length; ++i) {
+            Integer num = new Integer(A[i]);
+            if (set.contains(num)) {
+                set.remove(num);
+            } else {
+                set.add(num);
+            }
+        }
+        
+        if (set.size() != 1)
+            return 0;
+        
+        Iterator iterator = set.iterator();
+        
+        return ((Integer)iterator.next()).intValue();
+    }
+}
+
