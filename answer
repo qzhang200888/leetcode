@@ -1004,3 +1004,34 @@ public:
         return ret;
     }
 };
+
+Single Number II
+
+Given an array of integers, every element appears three times except for one. Find that single one. 
+
+public class Solution {
+    public int singleNumber(int[] A) {
+        if (A == null)
+            return 0;
+            
+        HashSet set1 = new HashSet(), set2 = new HashSet();
+        for (int i = 0; i < A.length; ++i) {
+            Integer num = new Integer(A[i]);
+            if (!set1.contains(num)) {
+                set1.add(num);
+            } else if (!set2.contains(num)) {
+                set2.add(num);
+            } else {
+                set1.remove(num);
+                set2.remove(num);
+            }
+        }
+        
+        if (set1.size() != 1)
+            return 0;
+        
+        Iterator iterator = set1.iterator();
+        
+        return ((Integer)iterator.next()).intValue();        
+    }
+}
