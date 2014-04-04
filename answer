@@ -1576,3 +1576,31 @@ public class Solution {
         }
     }
 }
+
+
+Valid Parentheses
+
+Given a string containing just the characters '(', ')', '{', '}', '[' and ']', determine if the input string is valid.
+
+The brackets must close in the correct order, "()" and "()[]{}" are all valid but "(]" and "([)]" are not.
+
+public class Solution {
+    public boolean isValid(String s) {
+        Stack stack = new Stack();
+        int length = s.length();
+        for (int i = 0; i < length; ++i) {
+            char c = s.charAt(i);
+            if (c == '(' || c == '{' || c == '[') {
+                stack.push(new Character(c));
+            }
+            if (c == ')' || c == '}' || c == ']') {
+                if (stack.empty()) return false;
+                char c1 = ((Character)stack.pop()).charValue();
+                if (c == ')' && c1 != '(') return false;
+                if (c == '}' && c1 != '{') return false;
+                if (c == ']' && c1 != '[') return false;
+            }            
+        }
+        return stack.empty();
+    }
+}
