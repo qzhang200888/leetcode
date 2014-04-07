@@ -2049,3 +2049,47 @@ public:
         return res;
     }
 };
+
+Validate Binary Search Tree
+
+ Given a binary tree, determine if it is a valid binary search tree (BST).
+
+Assume a BST is defined as follows:
+
+    The left subtree of a node contains only nodes with keys less than the node's key.
+    The right subtree of a node contains only nodes with keys greater than the node's key.
+    Both the left and right subtrees must also be binary search trees.
+
+/**
+ * Definition for binary tree
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+    bool isValidBST(TreeNode *root, int &min, int &max) {
+        if (root == NULL) {
+            min = INT_MAX;
+            max = INT_MIN;
+            return true;
+        }
+        
+        int leftMin, leftMax, rightMin, rightMax;
+        if (!isValidBST(root->left, leftMin, leftMax) || !isValidBST(root->right, rightMin, rightMax))
+            return false;
+        if (root->val <= leftMax || root->val >= rightMin)
+            return false;
+        min = root->val < leftMin ? root->val : leftMin;
+        max = root->val > rightMax ? root->val : rightMax;
+        
+        return true;
+    }
+public:
+    bool isValidBST(TreeNode *root) {
+        int min, max;
+        return isValidBST(root, min, max);
+    }
+};
