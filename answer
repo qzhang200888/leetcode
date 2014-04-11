@@ -2811,3 +2811,29 @@ public class Solution {
         return sum[grid.length-1][grid[0].length-1];
     }
 }
+
+Maximum Subarray
+
+ind the contiguous subarray within an array (containing at least one number) which has the largest sum.
+
+For example, given the array [−2,1,−3,4,−1,2,1,−5,4],
+the contiguous subarray [4,−1,2,1] has the largest sum = 6. 
+
+public class Solution {
+    public int maxSubArray(int[] A) {
+        if (A.length <= 0) return 0;
+        
+        int sum = A[0], curSum = A[0];
+        for (int i = 1; i < A.length; ++i) {
+            if (curSum + A[i] < A[i])
+                curSum = A[i];
+            else curSum += A[i];
+            
+            if (curSum > sum) {
+                sum = curSum;
+            }
+        }
+            
+        return sum;
+    }
+}
