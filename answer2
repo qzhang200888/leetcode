@@ -260,3 +260,93 @@ public class Solution {
         return res;
     }
 }
+
+Letter Combinations of a Phone Number
+
+Given a digit string, return all possible letter combinations that the number could represent.
+
+A mapping of digit to letters (just like on the telephone buttons) is given below.
+
+Input:Digit string "23"
+Output: ["ad", "ae", "af", "bd", "be", "bf", "cd", "ce", "cf"].
+
+Note:
+Although the above answer is in lexicographical order, your answer could be in any order you want. 
+
+class Solution {
+    vector<string> digitToLetter(char c) {
+        vector<string> v;
+        switch (c) {
+            case '2': 
+                v.push_back("a");
+                v.push_back("b");
+                v.push_back("c");
+                break;
+            case '3': 
+                v.push_back("d");
+                v.push_back("e");
+                v.push_back("f");
+                break;
+            case '4': 
+                v.push_back("g");
+                v.push_back("h");
+                v.push_back("i");
+                break;
+            case '5': 
+                v.push_back("j");
+                v.push_back("k");
+                v.push_back("l");
+                break;
+            case '6': 
+                v.push_back("m");
+                v.push_back("n");
+                v.push_back("o");
+                break;
+            case '7': 
+                v.push_back("p");
+                v.push_back("q");
+                v.push_back("r");
+                v.push_back("s");
+                break;
+            case '8': 
+                v.push_back("t");
+                v.push_back("u");
+                v.push_back("v");
+                break;
+            case '9': 
+                v.push_back("w");
+                v.push_back("x");
+                v.push_back("y");
+                v.push_back("z");
+                break;
+        }
+        return v;
+    }
+    
+public:
+    vector<string> letterCombinations(string digits) {
+        vector<string> v;
+        if (digits.size() == 0) {
+            v.push_back(digits);
+            return v;
+        }
+        
+        char c;
+        if (digits.size() == 1) {
+            c = digits.at(0);
+            return digitToLetter(c);
+        }
+        
+        c = digits.at(0);
+        vector<string> v1 = digitToLetter(c);
+        vector<string> v2 = letterCombinations(digits.substr(1));
+        
+        for (vector<string>::const_iterator it1 = v1.begin(); it1 != v1.end(); ++it1) {
+            for (vector<string>::const_iterator it2 = v2.begin(); it2 != v2.end(); ++it2) {
+                v.push_back(*it1 + *it2);
+            }
+        }
+        
+        return v;
+    }
+};
