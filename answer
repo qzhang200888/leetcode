@@ -2867,3 +2867,86 @@ public:
         return res;
     }
 };
+
+Valid Number
+
+Validate if a given string is numeric.
+
+Some examples:
+"0" => true
+" 0.1 " => true
+"abc" => false
+"1 a" => false
+"2e10" => true
+
+Note: It is intended for the problem statement to be ambiguous. You should gather all requirements up front before implementing one. 
+
+class Solution {
+    bool isNumberRecFun(const char *s, bool dotCanShow, bool eCanShow) {
+        if (*s == ' ') {
+            while (*s == ' ') 
+                ++s;
+            if (*s != '\0')
+                return false;
+        }
+            
+        if (*s == '\0') {
+            return true;
+        }
+        
+        if (*s == '.') {
+            if (!dotCanShow)
+              return false;
+              
+            dotCanShow = false;
+            ++s;
+        }
+            
+        if (*s >= '0' && *s <= '9') {
+            ++s;
+            if (*s == '.') {
+                if (!dotCanShow)
+                    return false;
+              
+                dotCanShow = false;
+                ++s;
+            }
+                
+            if (*s == 'e') {
+                if (!eCanShow)
+                    return false;
+                    
+                ++s;
+                while (*s == ' ') 
+                    ++s;
+
+                if (*s == '-' || *s == '+')
+                    ++s;
+
+                if (*s == '\0')
+                    return false;
+                    
+                eCanShow = false;
+                dotCanShow = false;
+            }
+            
+            return isNumberRecFun(s, dotCanShow, eCanShow);
+        }
+        
+        return false;
+    }
+    
+public:
+    bool isNumber(const char *s) {
+        while (*s == ' ') 
+            ++s;
+            
+        if (*s == '\0' || *s == 'e') 
+            return false;
+            
+        if (*s == '-' || *s == '+')
+            ++s;
+            
+        return isNumberRecFun(s, true, true);
+    }
+};
