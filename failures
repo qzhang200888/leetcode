@@ -1,0 +1,82 @@
+LRU Cache
+
+typedef struct Node {
+    int val;
+    int key;
+    Node *prev;
+    Node *next;
+    Node(int k, int v) {
+        val = v;
+        key = k;
+        prev = NULL;
+        next = NULL;
+    }
+} Node;
+
+class LRUCache{
+    int cap;
+    int count = 0;
+    Node *head, *tail;
+    unordered_map<int, Node*> map;
+public:
+    LRUCache(int capacity) {
+        cap = capacity;
+        head = NULL;
+        tail = NULL;
+        count = 0;
+    }
+    
+    ~LRUCache() {
+        delete map;
+        while (head != NULL) {
+            tmp = head;
+            head = head->next;
+            delete head;
+        }
+    }
+    
+    int get(int key) {
+        unordered_map<int, Node*>::const_iterator it = map.find(key);
+        if (it != map.end()) {
+            Node *n = it->second;
+            if (count > 1 && n->prev != NULL) {
+                n->prev->next = n->next;
+                if (n->next != NULL)
+                    n->next->prev = n->prev;
+                else tail = n->prev;
+                
+                n->prev = NULL;
+                n->next = head;
+                head = n;
+            }
+            
+            return n->val;
+        }
+        
+        return -1;
+    }
+    
+    void set(int key, int value) {
+        Node *n = new Node(key, value);
+        n->next = head;
+        if (head != NULL) {
+            head->prev = n;
+        }
+    
+        head = n;
+        if (tail == NULL)
+            tail = n;
+            
+        map[key] = n;
+        ++count;
+        
+        while (count > cap) {
+            Node *tmp = tail;
+            tail = tail->prev;
+            tail->next = NULL;
+            map.erase(tmp->key);
+            delete tmp;
+            --count;
+        }
+    }
+};
