@@ -80,3 +80,23 @@ public:
         }
     }
 };
+
+Interleaving String
+
+class Solution {
+public:
+    bool isInterleave(string s1, string s2, string s3) {
+        if (s3.size() == 0) {
+            return true;
+        }
+        
+        char c = s3.at(0);
+        if ((s1.size() == 0 || s1.at(0) != c) && (s2.size() == 0 || s2.at(0) != c))
+            return false;
+        if (s1.size() > 0 && s1.at(0) == c && isInterleave(s1.substr(1), s2, s3.substr(1)))
+            return true;
+        if (s2.size() > 0 && s2.at(0) == c && isInterleave(s1, s2.substr(1), s3.substr(1)))
+            return true;
+        return false;
+    }
+};
