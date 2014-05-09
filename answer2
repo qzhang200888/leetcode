@@ -619,3 +619,32 @@ public:
         return v;
     }
 };
+
+Pow(x, n)
+
+Implement pow(x, n).
+
+class Solution {
+public:
+    double pow(double x, int n) {
+        if (x == 1.0)
+            return 1.0;
+          
+        if (x == -1.0) {
+            if (n % 2 == 0)
+                return 1.0;
+            return -1.0;
+        }
+        
+        if (n < 0) 
+            return 1.0 / pow(x, -n);
+        
+        if (n == 0) 
+            return 1;
+        
+        if (n % 2 == 0)
+            return pow(x*x, n / 2);
+            
+        return x * pow(x*x, n / 2);
+    }
+};
