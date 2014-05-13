@@ -1,3 +1,26 @@
+Largest Rectangle in Histogram
+
+class Solution {
+public:
+    int largestRectangleArea(vector<int> &height) {
+        if (height.size() == 0) return 0;
+        
+        int N = height.size();
+        int max = 0;
+        for (int i = 0; i < N; ++i) {
+            int lowestHeight = height[i];
+            for (int j = i; j < N; ++j) {
+                lowestHeight = height[j] < lowestHeight ? height[j] : lowestHeight;
+                int area = (j - i + 1) *  lowestHeight;
+                if (area > max)
+                    max = area;
+            }
+        }
+        
+        return max;
+    }
+};
+
 LRU Cache
 
 typedef struct Node {
