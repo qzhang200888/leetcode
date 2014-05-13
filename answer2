@@ -1,3 +1,74 @@
+Max Points on a Line
+
+Given n points on a 2D plane, find the maximum number of points that lie on the same straight line.
+
+/**
+ * Definition for a point.
+ * struct Point {
+ *     int x;
+ *     int y;
+ *     Point() : x(0), y(0) {}
+ *     Point(int a, int b) : x(a), y(b) {}
+ * };
+ */
+class Solution {
+public:
+    int maxPoints(vector<Point> &points) {
+        if (points.size() == 0) return 0;
+        
+        int maxNum = 1;
+        for (int i = 0; i < points.size() - 1; ++i) {
+            unordered_map<double, int> map;
+            int numVertical = 1, numHorizontal = 1, dup = 0, maxInLoop = 0;
+            Point p1 = points.at(i);
+            for (int j = i + 1; j < points.size(); ++j) {
+                Point p2 = points.at(j);
+                if (p1.x == p2.x && p1.y == p2.y) {
+                    ++dup;
+                    continue;            if (numHorizontal > maxNum)
+                maxNum = numHorizontal;            if (numHorizontal > maxNum)
+                maxNum = numHorizontal;
+                }
+                if (p1.x == p2.x) {
+                    ++numVertical;
+                    continue;
+                }
+                if (p1.y == p2.y) {
+                    ++numHorizontal;
+                    continue;
+                }
+                
+                double p = ((double)p2.y - (double)p1.y) / ((double)p2.x - (double)p1.x);
+                p *= 100;
+                
+                int count = 2;
+                unordered_map<double, int>::const_iterator it = map.find(p);
+                if (it != map.end()) {
+                    count = it->second + 1;
+                }
+
+                if (count > maxInLoop)
+                    maxInLoop = count;
+                
+                map[p] = count;
+            }
+            
+            numVertical += dup;
+            numHorizontal += dup;
+            maxInLoop += dup;
+            
+            if (numHorizontal > maxNum)
+                maxNum = numHorizontal;       
+            if (numVertical > maxNum)
+                maxNum = numVertical;
+            if (maxInLoop > maxNum)
+                maxNum = maxInLoop;
+        }
+            
+        return maxNum;
+    }
+};
+
 Convert Sorted Array to Binary Search Tree
 
 Given an array where elements are sorted in ascending order, convert it to a height balanced BST.
