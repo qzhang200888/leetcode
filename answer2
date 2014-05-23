@@ -25,9 +25,7 @@ public:
                 Point p2 = points.at(j);
                 if (p1.x == p2.x && p1.y == p2.y) {
                     ++dup;
-                    continue;            if (numHorizontal > maxNum)
-                maxNum = numHorizontal;            if (numHorizontal > maxNum)
-                maxNum = numHorizontal;
+                    continue;
                 }
                 if (p1.x == p2.x) {
                     ++numVertical;
