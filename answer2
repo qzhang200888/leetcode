@@ -1,3 +1,68 @@
+Palindrome Partitioning
+
+Given a string s, partition s such that every substring of the partition is a palindrome.
+
+Return all possible palindrome partitioning of s.
+
+For example, given s = "aab",
+Return
+
+  [
+    ["aa","b"],
+    ["a","a","b"]
+  ]
+
+class Solution {
+    bool isPalindrome(string &s, int i, int j) {
+        while (i < j) {
+            if (s.at(i) != s.at(j))
+                return false;
+            ++i;
+            --j;
+        }
+        
+        return true;
+    }
+    
+public:
+    vector<vector<string>> partition(string s) {
+        vector<vector<string>> ret;
+        if (s.length() == 0) return ret;
+        int len = s.length();
+        
+        vector<vector<string>> *table = new vector<vector<string>>[len];
+        
+        table[0] = vector<vector<string>>();
+        vector<string> v;
+        v.push_back(s.substr(0, 1));
+        table[0].push_back(v);
+        
+        for (int i = 1; i < len; ++i) {
+            table[i] = vector<vector<string>>();
+            for (int j = i - 1; j >= 0; --j) {
+                if (isPalindrome(s, j + 1, i)) {
+                    for (vector<vector<string>>::iterator it = table[j].begin(); it != table[j].end(); ++it) {
+                        v = *it;
+                        v.push_back(s.substr(j + 1, i - j));
+                        table[i].push_back(v);
+                    }
+                }
+            }
+            
+            if (isPalindrome(s, 0, i)) {
+                v = vector<string>();
+                v.push_back(s.substr(0, i + 1));
+                table[i].push_back(v);
+            }
+        }
+        
+        ret = table[len -1];
+        delete[] table;
+        
+        return ret;
+    }
+};
+
 Max Points on a Line
 
 Given n points on a 2D plane, find the maximum number of points that lie on the same straight line.
