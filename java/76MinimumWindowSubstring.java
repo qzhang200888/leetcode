@@ -30,6 +30,12 @@ class Solution {
                 ++end;
             } else {
                 while (count == 0 && start < end) {
+                    int newLen = end - start + 1;
+                    if (newLen < len) {
+                        len = newLen;
+                        minStart = start;
+                        minEnd = end;
+                    }
                     if (map.containsKey(charList[start])) {
                         int fre = map.get(charList[start]);
                 
@@ -39,23 +45,17 @@ class Solution {
                     }
                     ++start;   
                 }
-                
-                if (count > 0)
-                    --start;
-
+            }
+        }
+        
+        if (count == 0) {
+            while (count == 0 && start < end) {
                 int newLen = end - start + 1;
                 if (newLen < len) {
                     len = newLen;
                     minStart = start;
                     minEnd = end;
                 }
-                
-                ++start;
-            }
-        }
-        
-        if (count == 0) {
-            while (count == 0 && start < end) {
                 if (map.containsKey(charList[start])) {
                     int fre = map.get(charList[start]);
                 
@@ -64,15 +64,6 @@ class Solution {
                     map.put(charList[start], ++fre);
                 }
                 ++start;   
-            }
-                
-            if (count > 0)
-                --start;
-            int newLen = end - start + 1;
-            if (newLen < len) {
-                len = newLen;
-                minStart = start;
-                minEnd = end;
             }
         }
         
