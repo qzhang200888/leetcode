@@ -8,43 +8,31 @@
  * }
  */
 class Solution {
-    List<List<Integer>> pathSum(TreeNode root, int sum, List<Integer> path) {
-        List<List<Integer>> res = new ArrayList<List<Integer>>();
-        if (root.left == null && root.right == null) {
-            if (sum == root.val) {
-                List<Integer> answer = new ArrayList(path);
-                answer.add(root.val);
-                res.add(answer);
-            }
-
-            return res;
+    void pathSum(List<List<Integer>> res, TreeNode root, int sum, List<Integer> path) {
+        if (root == null)
+            return;
+        
+        path.add(root.val);
+        if (root.left == null && root.right == null && sum == root.val) {
+            res.add(new ArrayList(path));
         }
 
-        path.add(root.val);
-        
         if (root.left != null) {
-            List<List<Integer>> leftPaths = pathSum(root.left, sum - root.val, path);
-            if (leftPaths.size() > 0) {
-                res.addAll(leftPaths);
-            }
+            pathSum(res, root.left, sum - root.val, path);
         }
         
         if (root.right != null) {
-            List<List<Integer>> rightPaths = pathSum(root.right, sum - root.val, path);
-            if (rightPaths.size() > 0) {
-                res.addAll(rightPaths);
-            }
+            pathSum(res, root.right, sum - root.val, path);
         }
 
         path.remove(path.size() - 1);
-        
-        return res;
     }
     
     public List<List<Integer>> pathSum(TreeNode root, int sum) {
-        if (root == null)
-            return new ArrayList<List<Integer>>();
+        List<List<Integer>> res = new ArrayList<List<Integer>>();
         List<Integer> path = new ArrayList<Integer>();
-        return pathSum(root, sum, path);
+        pathSum(res, root, sum, path);
+        
+        return res;
     }
 }
