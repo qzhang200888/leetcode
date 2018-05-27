@@ -40,3 +40,36 @@ class Solution {
         return isMatch(s.toCharArray(), 0, p.toCharArray(), 0, '\0');
     } 
 }
+
+// faster
+
+class Solution {
+    public boolean isMatch(String s, String p) {
+        char[] ss = s.toCharArray();
+        char[] pp = p.toCharArray();
+        
+        int m = ss.length, n = pp.length;
+        boolean[][] dp = new boolean[m+1][n+1];
+        dp[m][n] = true;
+        for (int j = n-1; j > 0; j--) {
+            if (pp[j] != '*') break;
+            j--;
+            dp[m][j] = true;
+        }
+        for (int i = m-1; i >= 0; i--) {
+            for (int j = n-1; j >= 0; j--) {
+                if (pp[j] == '*') {
+                    j--;
+                    if (dp[i][j+2]) {
+                        dp[i][j] = true;
+                    } else if (pp[j] == '.' || pp[j] == ss[i]) {
+                        dp[i][j] = dp[i+1][j];
+                    }
+                } else if (pp[j] == '.' || pp[j] == ss[i]) {
+                    dp[i][j] = dp[i+1][j+1];
+                }
+            }
+        }
+        return dp[0][0];
+    } 
+}
