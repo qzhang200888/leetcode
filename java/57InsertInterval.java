@@ -9,28 +9,26 @@
  */
 class Solution {
     public List<Interval> insert(List<Interval> intervals, Interval newInterval) {
-        if (newInterval == null)
-            return intervals;
-        
         List<Interval> res = new ArrayList<Interval>();
-        int i = 0;
-        while (i < intervals.size() && intervals.get(i).end < newInterval.start) {
-            res.add(intervals.get(i));
-            ++i;
+        if (intervals == null || newInterval == null)
+            return res;
+        
+        boolean added = false;
+        for (Interval i: intervals) {
+            if (added || newInterval.start > i.end)
+                res.add(i);
+            else if (newInterval.end < i.start && !added) {
+                res.add(newInterval);
+                res.add(i);
+                added = true;
+            } else {
+                newInterval.start = Math.min(newInterval.start, i.start);
+                newInterval.end = Math.max(newInterval.end, i.end);
+            }
         }
         
-        while (i < intervals.size() && intervals.get(i).start <= newInterval.end) {
-            newInterval.start = Math.min(intervals.get(i).start, newInterval.start);
-            newInterval.end = Math.max(intervals.get(i).end, newInterval.end);
-            ++i;
-        }
-        
-        res.add(newInterval);
-        
-        while (i < intervals.size()) {
-            res.add(intervals.get(i));
-            ++i;
-        }
+        if (!added)
+            res.add(newInterval);
         
         return res;
     }
