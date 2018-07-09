@@ -1,3 +1,5 @@
+// O(n) and O(n) solution
+
 class Solution {
     public boolean backspaceCompare(String S, String T) {
         Stack<Character> s1 = new Stack<>();
@@ -28,5 +30,79 @@ class Solution {
         }
         
         return true;
+    }
+}
+
+// O(n) and O(1) solution
+
+class Solution {
+    public boolean backspaceCompare(String S, String T) {
+        int i = S.length() - 1;
+        int j = T.length() - 1;
+        
+        while (i >= 0 && j >= 0) {
+            int count = 0;
+            char c1 = S.charAt(i);
+            while (i >= 0) {
+                if (c1 != '#' && count == 0)
+                    break;
+                if (c1 == '#')
+                    ++count;
+                else --count;
+                --i;
+                if (i >= 0)
+                    c1 = S.charAt(i);
+            }
+            
+            count = 0;
+            char c2 = T.charAt(j);
+            while (j >= 0) {
+                if (c2 != '#' && count == 0)
+                    break;
+                if (c2 == '#')
+                    ++count;
+                else --count;
+                --j;
+                if (j >= 0)
+                    c2 = T.charAt(j);
+            }
+            
+            if (i >= 0 && j >= 0 && c1 != c2)
+                return false;
+            --i;
+            --j;
+        }
+        
+        if (i >= 0) {
+            int count = 0;
+            char c1 = S.charAt(i);
+            while (i >= 0) {
+                if (c1 != '#' && count == 0)
+                    break;
+                if (c1 == '#')
+                    ++count;
+                else --count;
+                --i;
+                if (i >= 0)
+                    c1 = S.charAt(i);
+            }
+        }
+        
+        if (j >= 0) {
+            int count = 0;
+            char c2 = T.charAt(j);
+            while (j >= 0) {
+                if (c2 != '#' && count == 0)
+                    break;
+                if (c2 == '#')
+                    ++count;
+                else --count;
+                --j;
+                if (j >= 0)
+                    c2 = T.charAt(j);
+            }            
+        }
+        
+        return i == j;
     }
 }
