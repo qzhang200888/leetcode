@@ -42,3 +42,34 @@ class Solution {
         return res[1];
     }
 }
+
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    int[] transverse(TreeNode n, int k) {
+        if (n == null)
+            return new int[]{0, 0};
+        int[] left = transverse(n.left, k);
+        
+        if (left[1] >= k)
+            return left;
+        else if (left[1] == k - 1)
+            return new int[]{n.val, k};
+        else {
+            int[] right = transverse(n.right, k - left[1] - 1);
+            return new int[] {right[0], left[1] + 1 + right[1]};
+        }
+    }
+    
+    public int kthSmallest(TreeNode root, int k) {
+        int[] tr = transverse(root, k);
+        return tr[0];
+    }
+}
