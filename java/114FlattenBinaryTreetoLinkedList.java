@@ -34,3 +34,37 @@ class Solution {
         flattenTree(root);
     }
 }
+
+//
+
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public void flatten(TreeNode root) {
+        if (root == null)
+            return;
+        
+        TreeNode node = root, left = root.left, right = root.right;
+
+        if (left != null) {
+            flatten(left);
+            root.left = null;
+            root.right = left;
+            node = left;
+            while (node.right != null)
+                node = node.right;
+        }
+        
+        if (right != null) {
+            flatten(right);
+            node.right = right;
+        }
+    }
+}
