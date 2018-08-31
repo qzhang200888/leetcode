@@ -107,3 +107,46 @@ class MedianFinder {
         return root.val;
     }
 }
+
+// using heap
+
+class MedianFinder {
+    PriorityQueue<Integer> minQ;
+    PriorityQueue<Integer> maxQ;
+    /** initialize your data structure here. */
+    public MedianFinder() {
+        minQ = new PriorityQueue<Integer>();
+        maxQ = new PriorityQueue<Integer>(Collections.reverseOrder());
+    }
+    
+    public void addNum(int num) {
+        if (minQ.size() == 0) {
+            minQ.offer(num);
+            return;
+        }
+        
+        int max = minQ.peek();
+        if (num > max)
+            minQ.offer(num);
+        else maxQ.offer(num);
+
+        if (maxQ.size() > minQ.size())
+            minQ.offer(maxQ.poll());
+        else if (maxQ.size() + 1 < minQ.size())
+            maxQ.offer(minQ.poll());
+    }
+    
+    public double findMedian() {
+        if (minQ.size() > maxQ.size())
+            return minQ.peek();
+        
+        return (minQ.peek() + maxQ.peek()) / 2.0;
+    }
+}
+
+/**
+ * Your MedianFinder object will be instantiated and called as such:
+ * MedianFinder obj = new MedianFinder();
+ * obj.addNum(num);
+ * double param_2 = obj.findMedian();
+ */
