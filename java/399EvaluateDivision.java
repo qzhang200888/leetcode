@@ -3,12 +3,12 @@ class Solution {
                Set<String> visited, double res) {
         for (String neighbor: graph.get(start)) {
             if (neighbor.equals(end)) {
-                return res * edges.get(start + neighbor);
+                return res * edges.get(start + "-" + neighbor);
             }
             
-            if (!visited.contains(neighbor) && edges.containsKey(start + neighbor)) {
+            if (!visited.contains(neighbor)) {
                 visited.add(neighbor);
-                double d = calc(graph, edges, neighbor, end, visited, res * edges.get(start + neighbor));
+                double d = calc(graph, edges, neighbor, end, visited, res * edges.get(start + "-" + neighbor));
                 visited.remove(neighbor);
                 
                 if (d != -1.0)
@@ -32,8 +32,8 @@ class Solution {
             graph.get(equations[i][0]).add(equations[i][1]);
             graph.get(equations[i][1]).add(equations[i][0]);
             
-            edges.put(equations[i][0] + equations[i][1], values[i]);
-            edges.put(equations[i][1] + equations[i][0], 1.0 / values[i]);            
+            edges.put(equations[i][0] + "-" + equations[i][1], values[i]);
+            edges.put(equations[i][1] + "-" + equations[i][0], 1.0 / values[i]);            
         }
         
         double[] res = new double[queries.length];
