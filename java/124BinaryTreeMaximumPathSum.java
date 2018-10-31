@@ -94,3 +94,53 @@ class Solution {
         return res[1];
     }
 }
+
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    int[] maxPathSumHelper(TreeNode root) {  
+        int path = root.val;
+        int max = root.val;
+        if (root.left != null) {
+            int[] left = maxPathSumHelper(root.left);
+            if (left[1] > 0) {
+                path += left[1];
+                if (max < path)
+                    max = path;
+            }
+            if (max < left[0])
+                max = left[0];
+        }
+        
+        if (root.right != null) {
+            int[] right = maxPathSumHelper(root.right);
+            if (right[1] > 0) {
+                if (path + right[1] > max)
+                    max = path + right[1];
+                
+                if (right[1] + root.val > path) 
+                    path = right[1] + root.val;
+            }
+            
+            if (max < right[0])
+                max = right[0];
+        }
+        
+        return new int[] {max, path};
+    }
+    
+    public int maxPathSum(TreeNode root) {
+        if (root == null)
+            return 0;
+        
+        int[] res = maxPathSumHelper(root);
+        return res[0];
+    }
+}
