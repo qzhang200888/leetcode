@@ -106,3 +106,65 @@ class Solution {
         return i == j;
     }
 }
+
+// O(1)
+class Solution {
+    public boolean backspaceCompare(String S, String T) {
+        if (S == null) {
+            if (T != null)
+                return false;
+            return true;
+        }
+        
+        int sstar = 0, tstar = 0;
+        int i = S.length() - 1, j = T.length() - 1;
+        while (i >= 0 && j >= 0) {
+            char c1 = S.charAt(i);
+            char c2 = T.charAt(j);
+            if (c1 == '#') {
+                ++sstar;
+                --i;
+            } else if (c2 == '#') {
+                ++tstar;
+                --j;
+            } else if (sstar > 0) {
+                --sstar;
+                --i;
+            } else if (tstar > 0) {
+                --tstar;
+                --j;
+            } else if (c1 != c2) {
+                return false;
+            } else {
+                --i;
+                --j;
+            }
+        }
+        
+        while (i >= 0) {
+            if (S.charAt(i) != '#') {
+                if (sstar == 0) 
+                    return false;
+                --sstar;
+            } else {
+                ++sstar;
+            }
+            
+            --i;
+        }
+        
+        while (j >= 0) {
+            if (T.charAt(j) != '#') {
+                if (tstar == 0) 
+                    return false;
+                --tstar;
+            } else {
+                ++tstar;
+            }
+            
+            --j;
+        }
+        
+        return true;
+    }
+}
