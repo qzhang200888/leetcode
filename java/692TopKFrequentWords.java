@@ -33,3 +33,30 @@ class Solution {
         return res;
     }
 }
+
+============================================
+
+class Solution {
+    public List<String> topKFrequent(String[] words, int k) {
+        Map<String, Integer> map = new HashMap<>();
+        for (String w: words) {
+            map.put(w, map.getOrDefault(w, 0) + 1);
+        }
+        
+        List<String> keys = new ArrayList<>();
+        
+        keys.addAll(map.keySet());
+        
+        Collections.sort(keys, new Comparator<String>() {
+            @Override
+            public int compare(String s1, String s2) {
+                if (map.get(s2) == map.get(s1))
+                    return s1.compareTo(s2);
+
+                return map.get(s2) - map.get(s1);
+            }
+        });
+        
+        return keys.subList(0, k);
+    }
+}
