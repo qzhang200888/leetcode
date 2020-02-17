@@ -29,3 +29,25 @@ class Solution {
         return 0;
     }
 }
+
+============================================================
+
+class Solution {
+    public int jump(int[] nums) {
+        if (nums == null || nums.length == 0)
+            return 0;
+
+        int[] steps = new int[nums.length];
+        for (int i = 1; i < nums.length; ++i)
+            steps[i] = nums.length;
+
+        for (int i = 0; i < nums.length - 1; ++i) {
+            for (int j = 1; j <= nums[i] && i + j < nums.length; ++j) {
+                steps[i + j] = Math.min(steps[i + j], steps[i] + 1);
+            }   
+        }
+        
+        return steps[nums.length - 1];
+        
+    }
+}
