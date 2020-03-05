@@ -75,20 +75,18 @@ class Solution {
             sign *= -1;
             denom = -denom;
         }
-        
-        long fraction = num % denom;
-        
-        String s = Long.toString(num / denom);
-        if (sign < 0)
-            s = "-" + s;
-        
+                
         StringBuilder sb = new StringBuilder();
-        fractionToDecimal(fraction, denom, sb); 
-        
-        if( sb.length() > 0 ) {
-            s += "." + sb.toString();
+        if (sign < 0)
+            sb.append('-');
+        sb.append(num / denom);
+
+        long fraction = num % denom;
+        if (fraction > 0) {
+            sb.append('.');
+            fractionToDecimal(fraction, denom, sb); 
         }
-        
-        return s;
+
+        return sb.toString();
     }
 }
