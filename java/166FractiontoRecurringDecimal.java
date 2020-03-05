@@ -90,3 +90,62 @@ class Solution {
         return sb.toString();
     }
 }
+
+==================================================================
+
+class Solution {
+ 
+    void fractionToDecimal(long numerator, long denominator, StringBuilder sb) {
+        Map<Long, Integer> map = new HashMap<>();
+        
+        int pos = sb.length();
+        while (numerator != 0) {
+            numerator *= 10;
+            if (map.containsKey(numerator)) {
+                sb.insert(map.get(numerator), "(" );
+                sb.append(')');
+                
+                return;
+            }
+            
+            long div = numerator / denominator;
+            sb.append((char)('0' + div));
+            map.put(numerator, pos);
+            numerator %= denominator;
+            
+            ++pos;
+        }      
+    }
+    
+    public String fractionToDecimal(int numerator, int denominator) {
+        if (numerator == 0)
+            return "0";
+
+        int sign = 1;
+        long num = numerator;
+        long denom = denominator;
+        
+        if (numerator < 0) {
+            sign *= -1;
+            num = -num;
+        }
+        
+        if (denominator < 0) {
+            sign *= -1;
+            denom = -denom;
+        }
+                
+        StringBuilder sb = new StringBuilder();
+        if (sign < 0)
+            sb.append('-');
+        sb.append(num / denom);
+
+        long fraction = num % denom;
+        if (fraction > 0) {
+            sb.append('.');
+            fractionToDecimal(fraction, denom, sb); 
+        }
+
+        return sb.toString();
+    }
+}
