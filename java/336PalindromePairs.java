@@ -18,13 +18,12 @@ class Solution {
             return s;
 
         StringBuilder sb = new StringBuilder();
-        char[] chars = s.toCharArray();
-        for (int i = chars.length - 1; i >= 0; --i)
-            sb.append(chars[i]);
+        sb.append(s.toCharArray());
+        sb.reverse();
         
         return sb.toString();
     }
-    
+   
     public List<List<Integer>> palindromePairs(String[] words) {
         List<List<Integer>> lst = new ArrayList<>();
         if (words == null || words.length <= 1)
