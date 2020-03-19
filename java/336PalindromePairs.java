@@ -1,6 +1,6 @@
 class Solution {
     boolean isPalindrome(String s) {
-        if (s == null || s.length() == 0)
+        if (s == null || s.length() < 2)
             return true;
         int i = 0, j = s.length() - 1;
         while (i < j) {
@@ -13,84 +13,88 @@ class Solution {
         return true;
     }
     
-    String reverse(String s) {
-        StringBuilder sb = new StringBuilder(s);
-        return sb.reverse().toString();
+    String revert(String s) {
+        if (s.length() < 2)
+            return s;
+
+        StringBuilder sb = new StringBuilder();
+        char[] chars = s.toCharArray();
+        for (int i = chars.length - 1; i >= 0; --i)
+            sb.append(chars[i]);
+        
+        return sb.toString();
     }
     
     public List<List<Integer>> palindromePairs(String[] words) {
-        Map<String, List<Integer>> preMap = new HashMap<String, List<Integer>>();
-        Map<String, List<Integer>> postMap = new HashMap<String, List<Integer>>();
-        Map<String, List<Integer>> reverseMap = new HashMap<String, List<Integer>>();
-        
-        List<Integer> palList = new ArrayList<Integer>();       
-        List<Integer> emptyList = new ArrayList<Integer>();
-        
-        int j = 0;
-        for (String w: words) {
-            for (int i = 1; i < w.length(); ++i) {
-                if (isPalindrome(w.substring(0, i))) {
-                    List<Integer> lst = preMap.getOrDefault(reverse(w.substring(i)), new ArrayList());
-                    lst.add(j);
-                    preMap.put(reverse(w.substring(i)), lst);
-                } 
+        List<List<Integer>> lst = new ArrayList<>();
+        if (words == null || words.length <= 1)
+            return lst;
+
+        Map<String, List<Integer>> preMap = new HashMap<>();
+        Map<String, List<Integer>> postMap = new HashMap<>();
+
+        int index = 0;
+        for (String s: words) {
+            for (int i = 0; i <= s.length(); ++i) {
+                String first = s.substring(0, i);
+                String second = s.substring(i);
                 
-                if (isPalindrome(w.substring(i))) {
-                    List<Integer> lst = postMap.getOrDefault(reverse(w.substring(0, i)), new ArrayList());
-                    lst.add(j);
-                    postMap.put(reverse(w.substring(0, i)), lst);
+                if (isPalindrome(first)) {
+                    String reverse = revert(second);
+                    if (!postMap.containsKey(reverse)) {
+                        postMap.put(reverse, new ArrayList<Integer>());
+                    }
+                    postMap.get(reverse).add(index);
+                }
+                
+                if (isPalindrome(second)){
+                    String reverse = revert(first);
+                    if (!preMap.containsKey(reverse)) {
+                        preMap.put(reverse, new ArrayList<Integer>());
+                    }
+                    preMap.get(reverse).add(index);
+                }
+            }            
+            
+            ++index;
+        }
+        
+        index = 0;
+        Set<List<Integer>> set = new HashSet<>();
+        for (String s: words){
+            if (preMap.containsKey(s)) {
+                for (int i: preMap.get(s)) {
+                    if (i == index)
+                        continue;
+                    
+                    List<Integer> pair = new ArrayList<>();
+                    pair.add(i);
+                    pair.add(index);
+                    if (!set.contains(pair)) {
+                        lst.add(pair);
+                        set.add(pair);
+                    }
                 }
             }
-                        
-            if (w.equals(""))
-                emptyList.add(j);
-            else if (isPalindrome(w))
-                palList.add(j);
-            else {
-                List<Integer> lst = postMap.getOrDefault(w, new ArrayList());
-                lst.add(j);
-                reverseMap.put(reverse(w), lst);
-            }
-            ++j;
-        }
-        
-        List<List<Integer>> res = new ArrayList<List<Integer>>();
-        
-        j = 0;
-        for (String w: words) {
-            if (preMap.containsKey(w)) {
-                for (int index: preMap.get(w))
-                    if (index != j)
-                        res.add(Arrays.asList(j, index));
-            }
- 
-            if (postMap.containsKey(w)) {
-                for (int index: postMap.get(w))
-                    if (index != j)
-                        res.add(Arrays.asList(index, j));
-            }
- 
-            if (reverseMap.containsKey(w)) {
-                for (int index: reverseMap.get(w))
-                    if (index != j)
-                        res.add(Arrays.asList(index, j));
+            
+            if (postMap.containsKey(s)) {
+                for (int i: postMap.get(s)) {
+                    if (i == index)
+                        continue;
+                    
+                    List<Integer> pair = new ArrayList<>();
+                    pair.add(index);
+                    pair.add(i);
+                    if (!set.contains(pair)) {
+                        lst.add(pair);
+                        set.add(pair);
+                    }
+                }
             }
             
-            ++j;
+            ++index;
         }
         
-        for (int i = 0; i < emptyList.size(); ++i) {
-            for (j = i + 1; j < emptyList.size(); ++j) {
-                res.add(Arrays.asList(emptyList.get(i), emptyList.get(j)));
-                res.add(Arrays.asList(emptyList.get(j), emptyList.get(i)));
-            }
-            
-            for (j = 0; j < palList.size(); ++j) {
-                res.add(Arrays.asList(emptyList.get(i), palList.get(j)));
-                res.add(Arrays.asList(palList.get(j), emptyList.get(i)));
-            }               
-        }
-        
-        return res;
+        return lst;
     }
 }
