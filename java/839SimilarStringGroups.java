@@ -14,15 +14,18 @@ class Solution {
     int findAncestor(int[] parents, int i) {
         if (parents[i] == i)
             return i;
-        return findAncestor(parents, parents[i]);
+        parents[i] = findAncestor(parents, parents[i]);
+        
+        return parents[i];
     }
     
     void union(int i, int j, int[] parents) {
         int ele1 = findAncestor(parents, i);
         int ele2 = findAncestor(parents, j);
-        if (ele1 != ele2)
+        if (ele1 != ele2) {
+            parents[i] = ele2;
             parents[ele1] = ele2;
-        
+        }
     }
     public int numSimilarGroups(String[] A) {
         int[] parents = new int[A.length];
