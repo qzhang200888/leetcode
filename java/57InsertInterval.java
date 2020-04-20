@@ -33,3 +33,38 @@ class Solution {
         return res;
     }
 }
+
+=============================================================================
+
+class Solution {
+    public int[][] insert(int[][] intervals, int[] newInterval) {
+        List<int[]> lst = new ArrayList<>();
+        boolean added = false;
+        for (int[] inter: intervals) {
+            if (inter[1] < newInterval[0])
+                lst.add(inter);
+            else if (inter[0] > newInterval[1]) {
+                if (!added) {
+                    lst.add(newInterval);
+                    added = true;
+                }
+                
+                lst.add(inter);
+            } else {
+                newInterval[0] = Math.min(newInterval[0], inter[0]);
+                newInterval[1] = Math.max(newInterval[1], inter[1]);
+            }
+        }
+        
+        if (!added)
+            lst.add(newInterval);
+        
+        int[][] res = new int[lst.size()][2];
+        for (int i = 0; i < lst.size(); ++i) {
+            res[i][0] = lst.get(i)[0];
+            res[i][1] = lst.get(i)[1];
+        }
+        
+        return res;
+    }
+}
