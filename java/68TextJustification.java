@@ -1,3 +1,66 @@
+
+class Solution {
+    public List<String> fullJustify(String[] words, int maxWidth) {
+        int i = 0;
+        List<String> lst = new ArrayList<>();
+        while (i < words.length) {
+            int length = 0;
+            
+            int j = i;
+            length += words[i].length();
+            while ((j + 1)< words.length) {
+                if (length + words[j + 1].length() + 1 > maxWidth)
+                    break;
+                length += words[j+1].length() + 1;
+                ++j;
+            }
+            
+            int spaces = j - i;
+            if (j < words.length - 1)
+                spaces += maxWidth - length;
+            
+            int remainder = 0;
+            int num = 0;
+            
+            StringBuilder sb = new StringBuilder();
+            sb.append(words[i]);
+            
+            if (j > i) {
+                remainder = spaces % (j - i);
+                num = spaces / (j - i);
+            } else if (j < words.length) {
+                for (int k = 0; k < spaces; ++k)
+                    sb.append(' ');
+            }
+            
+            ++i;
+            while (i <= j) {
+                for (int k = 0; k < num; ++k)
+                    sb.append(' ');
+                if (remainder > 0) {
+                    sb.append(' ');
+                    --remainder;
+                }
+                
+                sb.append(words[i]);
+                
+                ++i;
+            }
+
+            if (i == words.length) {
+                for (int k = 0; k < maxWidth - length; ++k)
+                    sb.append(' ');
+            }
+            
+            lst.add(sb.toString());
+        }
+        
+        return lst;
+    }
+}
+
+========================================================================
+
 class Solution {
     public List<String> fullJustify(String[] words, int maxWidth) {
         List<String> res = new ArrayList<String>();
