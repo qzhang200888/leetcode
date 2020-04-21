@@ -1,4 +1,41 @@
 class MedianFinder {
+    PriorityQueue<Double> upperQueue;
+    PriorityQueue<Double> lowerQueue;
+    /** initialize your data structure here. */
+    public MedianFinder() {
+        lowerQueue = new PriorityQueue<>(Collections.reverseOrder());
+        upperQueue = new PriorityQueue<>();
+    }
+    
+    public void addNum(int num) {
+        if (upperQueue.isEmpty() || upperQueue.peek() <= num)
+            upperQueue.offer((double)num);
+        else
+            lowerQueue.offer((double)num);
+        
+        if (upperQueue.size() > lowerQueue.size() + 1)
+            lowerQueue.offer(upperQueue.poll());
+        else if (lowerQueue.size() > upperQueue.size())
+            upperQueue.offer(lowerQueue.poll());
+    }
+    
+    public double findMedian() {
+        if (upperQueue.size() > lowerQueue.size())
+            return upperQueue.peek();
+        return (upperQueue.peek() + lowerQueue.peek()) / 2.0;
+    }
+}
+
+/**
+ * Your MedianFinder object will be instantiated and called as such:
+ * MedianFinder obj = new MedianFinder();
+ * obj.addNum(num);
+ * double param_2 = obj.findMedian();
+ */
+
+============================
+
+class MedianFinder {
     class TreeNode {
         public double val;
         public TreeNode left, right;
