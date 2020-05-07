@@ -2,12 +2,11 @@ class Solution:
     def countSubstrings(self, s: str) -> int:
         count = 0
         dp = [[0  for _ in range(len(s))] for _ in range(len(s))]
-        for i in range(len(s) - 1, -1, -1):
+        for i in range(len(s)):
             dp[i][i] = 1
-            count += 1
-            if i == len(s) - 1:
-                continue
-                
+            
+        count = len(s)
+        for i in range(len(s) - 2, -1, -1):                
             for j in range(i + 1, len(s)):
                 if s[i] == s[j]:
                     if j - i < 3:
