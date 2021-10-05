@@ -45,3 +45,29 @@ class Solution {
         return max;
     }
 }
+
+=============================
+
+class Solution {
+    public int longestValidParentheses(String s) {
+        int max = 0;
+        int[] prev = new int[s.length()];
+        Stack<Integer> stack = new Stack<>();
+        for (int i = 0; i < s.length(); ++i) {
+            char c = s.charAt(i);
+            if (c == '(') {
+                stack.push(i);
+            } else if (!stack.isEmpty()) {
+                int cur = stack.pop();
+                int newLength = i - cur + 1;
+                if (cur > 0)
+                    newLength += prev[cur - 1];
+                prev[i] = newLength;
+                if (newLength > max)
+                    max = newLength;
+            }
+        }
+        
+        return max;
+    }
+}
