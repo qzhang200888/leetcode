@@ -30,3 +30,59 @@ class Solution {
         return res;
     }
 }
+
+==========================================
+
+class Solution {
+    void combinationSum(int[] candidates, int target, int sum, int index, List<List<Integer>> res, List<Integer> lst) {
+        if (index >= candidates.length)
+            return;
+
+        if (sum + candidates[index] > target)
+            return;
+
+        if (sum + candidates[index] == target) {
+            List<Integer> newLst = new ArrayList<>();
+            for (int i: lst)
+                newLst.add(i);
+            newLst.add(candidates[index]);
+            res.add(newLst);
+            return;
+        }
+
+        int newIndex = index + 1;
+        while (newIndex < candidates.length && candidates[newIndex] == candidates[index])
+            ++newIndex;
+        combinationSum(candidates, target, sum, newIndex, res, lst);
+        
+        for (int i = index; i < newIndex; ++i) {
+          lst.add(candidates[i]);
+          sum += candidates[i];
+          if (sum == target) {
+              List<Integer> newLst = new ArrayList<>();
+              for (int k: lst)
+                  newLst.add(k);
+              res.add(newLst);
+              
+              for (int j = i; j >= index; --j)
+                  lst.remove(lst.size() - 1);
+              return;            
+          }
+          combinationSum(candidates, target, sum, newIndex, res, lst);
+        }
+        
+        for (int i = index; i < newIndex; ++i) {
+          lst.remove(lst.size() - 1);
+          sum -= candidates[i];
+        }
+    }
+
+    public List<List<Integer>> combinationSum2(int[] candidates, int target) {
+        List<List<Integer>> res = new ArrayList<>();
+        List<Integer> lst = new ArrayList<>();
+        Arrays.sort(candidates);
+        combinationSum(candidates, target, 0, 0, res, lst);
+
+        return res;    
+    }
+}
