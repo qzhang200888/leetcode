@@ -144,3 +144,52 @@ class Solution {
         return res[0];
     }
 }
+
+=====================================
+
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    int[] maxPathSumPair(TreeNode node) {
+        if (node == null) {
+            return new int[] {0, 0};
+        }
+        
+        int[] leftPair = maxPathSumPair(node.left);
+        int[] rightPair = maxPathSumPair(node.right);
+        
+        int rootPath = Math.max(leftPair[1], rightPair[1]);
+        if (rootPath > 0)
+            rootPath +=  node.val;
+        else rootPath =  node.val;
+        
+        int newMax = node.val;
+        newMax = Math.max(newMax, leftPair[1] + node.val + rightPair[1]);
+        newMax = Math.max(newMax, rootPath);
+        if (node.left != null)
+            newMax = Math.max(newMax, leftPair[0]);
+        if (node.right != null)
+            newMax = Math.max(newMax, rightPair[0]);
+        
+        return new int[] {newMax, rootPath};
+    }
+
+    public int maxPathSum(TreeNode root) {
+        if (root == null)
+            return 0;
+        return maxPathSumPair(root)[0];
+    }
+}
