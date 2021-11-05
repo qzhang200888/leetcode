@@ -1,3 +1,30 @@
+
+class Solution {
+    public boolean backspaceCompare(String s, String t) {
+        StringBuilder sbs = new StringBuilder();
+        StringBuilder sbt = new StringBuilder();
+        for (int i = 0; i < s.length(); ++i) {
+            char c = s.charAt(i);
+            if (c != '#')
+                sbs.append(c);
+            else if (sbs.length() > 0)
+                sbs.setLength(sbs.length() - 1);
+        }
+    
+        for (int i = 0; i < t.length(); ++i) {
+            char c = t.charAt(i);
+            if (c != '#')
+                sbt.append(c);
+            else if (sbt.length() > 0)
+                sbt.setLength(sbt.length() - 1);
+        }
+        
+        return sbt.toString().equals(sbs.toString());
+    }
+}
+
+=============================================================
+
 // O(n) and O(n) solution
 
 class Solution {
