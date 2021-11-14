@@ -9,11 +9,7 @@ class Solution {
         PriorityQueue<Ppoint> queue = new PriorityQueue<Ppoint>(k, new Comparator<Ppoint>() {
             @Override
             public int compare(Ppoint p1, Ppoint p2) {
-                if (p2.dist > p1.dist)
-                    return 1;
-                if (p2.dist < p1.dist)
-                    return -1;
-                return 0;
+                return Double.compare(p2.dist, p1.dist);
             }
         });
         
