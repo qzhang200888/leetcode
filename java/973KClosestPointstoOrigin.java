@@ -18,16 +18,10 @@ class Solution {
             ppt.x = p[0];
             ppt.y = p[1];
             ppt.dist = Math.sqrt(p[0] * p[0] + p[1] * p[1]);
-            System.out.println(ppt.dist);
-            if (queue.size() < k) {
-                queue.add(ppt);
-                continue;
-            }
-            
-            Ppoint top = queue.peek();
-            if (top.dist > ppt.dist) {
+
+            queue.add(ppt);
+            if (queue.size() > k) {
                 queue.poll();
-                queue.add(ppt);
             }
         }
         
