@@ -1,3 +1,70 @@
+
+class Solution {
+    int largestRectangleArea(int[] heights) {
+        if (heights == null || heights.length == 0)
+            return 0;
+        Stack<Integer> stack = new Stack<>();
+        int max = 0;
+        for (int i = 0; i < heights.length; ++i) {
+            while (!stack.isEmpty() && heights[stack.peek()] > heights[i]) {
+                int idx = stack.pop();
+                int area = 0;
+                if (stack.isEmpty()) {
+                    area = heights[idx] * i;
+                } else {
+                    area = heights[idx] * (i - stack.peek() - 1);
+                }
+                if (area > max) {
+                    max = area;
+                }
+            }
+            
+            stack.push(i);
+        }
+        
+        while (!stack.isEmpty()) {
+            int idx = stack.pop();
+            int area = 0;
+            if (stack.isEmpty()) {
+                area = heights[idx] * heights.length;
+            } else {
+                area = heights[idx] * (heights.length - stack.peek() - 1);
+            }
+            if (area > max) {
+                max = area;
+            }
+        }
+        
+        return max;
+    }
+    
+    public int maximalRectangle(char[][] matrix) {
+        if (matrix == null || matrix.length == 0 || matrix[0].length == 0)
+            return 0;
+        int[] heights = new int[matrix[0].length];
+        int max = 0;
+        for (int i = 0; i < matrix.length; ++i) {
+            for (int j = 0; j < heights.length; ++j) {
+                if (matrix[i][j] == '0')
+                    heights[j] = 0;
+                else if (i == 0)
+                    heights[j] = 1;
+                else ++heights[j];
+            }
+            
+            int rec = largestRectangleArea(heights);
+            if (rec > max) {
+                max = rec;
+            }
+        }
+        
+        return max;
+    }
+}
+
+
+==============================================================================
+
 class Solution {    
     public int maximalRectangle(char[][] matrix) {
         if (matrix == null || matrix.length == 0 || matrix[0].length == 0)
