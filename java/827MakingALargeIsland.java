@@ -1,3 +1,97 @@
+
+class Solution {    
+    public int largestIsland(int[][] grid) {
+        int group = 2;
+        List<Integer> lst = new ArrayList<>();
+        int max = 0;
+        for (int i = 0; i < grid.length; ++i) {
+            for (int j = 0; j < grid[0].length; ++j) {
+                if (grid[i][j] == 1) {
+                    int ar = area(grid, i, j, group);
+                    if (ar > max)
+                        max = ar;
+                    lst.add(ar);
+                    ++group;
+                }
+            }
+        }
+        
+        if (max == grid.length * grid[0].length)
+            return max;
+        
+        for (int i = 0; i < grid.length; ++i) {
+            for (int j = 0; j < grid[0].length; ++j) {
+                if (grid[i][j] != 0)
+                    continue;
+                int group1 = -1, group2 = -1, group3 = -1;
+                int ar = 1;
+                if (i > 0 && grid[i-1][j] != 0) {
+                    group1 = grid[i-1][j];
+                    ar += lst.get(grid[i-1][j] - 2);
+                }
+                if (j > 0 && grid[i][j-1] != 0) {
+                    if (group1 < 0) {
+                        group1 = grid[i][j - 1];
+                        ar += lst.get(grid[i][j-1] - 2);
+                    } else if (grid[i][j - 1] != group1) {
+                        group2 = grid[i][j - 1];
+                        ar += lst.get(grid[i][j-1] - 2);
+                    }
+                }
+
+                if (i < grid.length - 1 && grid[i+1][j] != 0) {
+                    if (group1 < 0) {
+                        group1 = grid[i + 1][j];
+                        ar += lst.get(grid[i+1][j] - 2);
+                    } else if (group2 < 0 && grid[i+1][j] != group1) {
+                        group2 = grid[i+1][j ];
+                        ar += lst.get(grid[i+1][j] - 2);
+                    } else if (group1 > 0 && group2 > 0 && grid[i+1][j] != group1 && grid[i+1][j] != group2) {
+                        group3 = grid[i+1][j];
+                        ar += lst.get(grid[i+1][j] - 2);
+                    }
+                }
+
+                if (j< grid[0].length - 1 && grid[i][j+1] != 0) {
+                    if (group1 < 0) {
+                        ar += lst.get(grid[i][j+1] - 2);
+                    } else if (group2 < 0 && grid[i][j+1] != group1) {
+                        ar += lst.get(grid[i][j+1] - 2);
+                    } else if (group1 > 0 && group2 > 0 && group3 < 0 && grid[i][j+1] != group1 && grid[i][j+1] != group2) {
+                        ar += lst.get(grid[i][j+1] - 2);
+                    } else if (group1 > 0 && group2 > 0 && group3 > 0 && grid[i][j+1] != group1 && grid[i][j+1] != group2 && grid[i][j+1] != group3) {
+                        ar += lst.get(grid[i][j+1] - 2);
+                    }
+                }
+                
+                if (max < ar) {
+                    max = ar;
+                }
+            }
+        }
+        
+        return max;
+    }
+    
+    int area(int[][] grid, int r, int c, int group) {
+        if (r < 0 || c < 0 || r >= grid.length || c >= grid[0].length)
+            return 0;
+
+        if (grid[r][c] != 1)
+            return 0;
+
+        grid[r][c] = group;
+        int a = 1;
+        a += area(grid, r - 1, c, group);
+        a += area(grid, r + 1, c, group);
+        a += area(grid, r, c - 1, group);
+        a += area(grid, r, c + 1, group);
+        
+        return a;
+    }
+}
+
+======================================================================
 class Solution {
     boolean isCandidate(int[][] grid, int r, int c) {
         if (grid[r][c] != 0)
