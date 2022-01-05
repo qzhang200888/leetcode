@@ -1,3 +1,38 @@
+
+class Solution {
+    public int[][] merge(int[][] intervals) {
+        List<int[]> lst = new ArrayList<>();
+        Arrays.sort(intervals, new Comparator<int[]>() {
+            @Override
+            public int compare(int[] i1, int[] i2) {
+                return i1[0] - i2[0];
+            }
+        });
+        
+        List<int[]> res = new ArrayList<>();
+        int[] interv = intervals[0];
+        for (int i = 1; i < intervals.length; ++i) {
+            if (intervals[i][0] > interv[1]) {
+                res.add(interv);
+                interv = intervals[i];
+            } else {
+                interv[1] = Math.max(interv[1], intervals[i][1]);
+            }
+        }
+        
+        res.add(interv);
+        
+        int[][] output = new int[res.size()][2];
+        for (int i = 0; i < output.length; ++i) {
+            output[i][0] = res.get(i)[0];
+            output[i][1] = res.get(i)[1];
+        }
+
+        return output;
+    }
+}
+
+============================================================================
 /**
  * Definition for an interval.
  * public class Interval {
