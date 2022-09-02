@@ -3,6 +3,80 @@
  * struct ListNode {
  *     int val;
  *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+    ListNode* revert(ListNode* l1) {
+        ListNode *n1 = l1;
+        if (n1 == NULL)
+            return n1;
+        ListNode *n2 = l1->next;
+        if (n2 == NULL) {
+            return n1;
+        }
+        
+        while (n2->next != NULL) {
+            ListNode* newNode = n2->next;
+            n2->next = n1;
+            n1 = n2;
+            n2 = newNode;
+        }
+        
+        n2->next = n1;
+        l1->next = NULL;
+        return n2;
+    }
+public:
+    ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
+        if (l1 == NULL) {
+            return l2;
+        }
+        if (l2 == NULL) {
+            return l1;
+        }
+        ListNode* n1 = revert(l1);
+        ListNode* n2 = revert(l2);
+        
+        int c = 0;
+        ListNode* newList = NULL, *n = NULL;
+        while (n1 != NULL || n2 != NULL) {
+            int v= c;
+            if (n1 != NULL) {
+                v += n1->val;
+                n1 = n1->next;
+            }
+            if (n2 != NULL) {
+                v += n2->val;
+                n2 = n2->next;
+            }
+            if (newList == NULL) {
+                newList = new ListNode(v % 10);
+                n = newList;
+            } else {
+                n->next = new ListNode(v % 10);
+                n = n->next;
+            }
+            
+            c = v / 10;
+        }
+        
+        if (c != 0) {
+            n->next = new ListNode(c);
+        }
+        return revert(newList);
+    }
+};
+
+==================================================================
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
  *     ListNode(int x) : val(x), next(NULL) {}
  * };
  */
