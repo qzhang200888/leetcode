@@ -73,3 +73,34 @@ class Solution {
         return maxStart;
     }
 }
+
+
+///////////
+class Solution {
+    boolean canCompleteCircuit(int[] gas, int[] cost, int start) {
+        int sum = 0;
+        for (int i = start; i < gas.length; ++i) {
+            sum += gas[i] - cost[i];
+            if (sum < 0) {
+                return false;
+            }
+        }
+        for (int i = 0; i < start; ++i) {
+            sum += gas[i] - cost[i];
+            if (sum < 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public int canCompleteCircuit(int[] gas, int[] cost) {
+        for (int i = 0; i < gas.length; ++i) {
+            if (canCompleteCircuit(gas, cost, i)) {
+                return i;
+            }
+        }
+
+        return -1;
+    }
+}

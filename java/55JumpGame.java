@@ -17,3 +17,26 @@ class Solution {
         return res[nums.length - 1];
     }
 }
+
+///////////////////////////////////////////////////
+
+class Solution {
+    public boolean canJump(int[] nums) {
+        boolean[] res = new boolean[nums.length];
+        res[nums.length - 1] = true;
+        for (int i = nums.length - 2; i >= 0; --i) {
+            res[i] = false;
+            if (nums[i] == 0) {
+                continue;
+            }
+            for (int j = i + 1; j <= i + nums[i]; ++j) {
+                if (res[j]) {
+                    res[i] = true;
+                    break;
+                }
+            }
+        }
+
+        return res[0];
+    }
+}

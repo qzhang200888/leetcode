@@ -51,3 +51,30 @@ class Solution {
         
     }
 }
+
+=================================================================
+
+class Solution {
+    public int jump(int[] nums) {
+        if (nums.length <= 1) {
+            return 0;
+        }
+
+        int[] res = new int[nums.length];
+        res[nums.length - 1] = 0;
+        for (int i = nums.length - 2; i >= 0; --i) {
+            int min = Integer.MAX_VALUE;
+            for (int j = i + 1; j <= i + nums[i] && j < nums.length; ++j) {
+                min= Math.min(min, res[j]);
+            }
+
+            if (min < Integer.MAX_VALUE) {
+                res[i] = min + 1;
+            } else {
+                res[i] = Integer.MAX_VALUE;
+            }
+        }
+
+        return res[0];
+    }
+}
